@@ -19,7 +19,6 @@ app.use(express.urlencoded({extended:false}));
 app.use(morgan('dev'));
 app.use(methodOverride('_method'));
 app.set('view engine','ejs');
-app.use(express.static(__dirname + '/views'));
 //connect mongo db
 
 const conn = mongoose.createConnection(process.env.MONGO_DB_URL);
@@ -28,6 +27,7 @@ let gfs;
 
 conn.once('open',()=>{
     // initialize stream
+    console.log("mongodb connected")
     gfs = Grid(conn.db,mongoose.mongo);
     gfs.collection('uploads');
 });
@@ -59,16 +59,7 @@ const storage = new GridFsStorage({
 // routes 
 
 app.get('/',(req,res)=>{
-    gfs.files.find().toArray((err,files)=>{
-        //check if files 
-        if(!files || files.length === 0){
-            res.render('index', { files: false });
-        }else {
-            res.render('index', { files: files });
-        }
-    });
-
-    
+    res.render('index');
 });
 
 app.post('/upload',upload.single('file'),(req,res)=>{ // name passed in single must match name field in input type file
