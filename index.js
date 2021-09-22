@@ -27,7 +27,7 @@ let gfs;
 
 conn.once('open',()=>{
     // initialize stream
-    console.log("mongodb connected")
+    console.log("mongodb connected");
     gfs = Grid(conn.db,mongoose.mongo);
     gfs.collection('uploads');
 });
